@@ -1,0 +1,29 @@
+---
+# A nice to have module, but manipulating the file output destination and extraction
+# will be a complex scenario.
+
+# - name: Save the running configuration of the BIG-IP
+#   f5networks.f5_modules.bigip_config:
+#     save: yes
+#     provider: "{{ provider }}"
+#   register: config_backup
+#   delegate_to: localhost
+
+- name: Collect f5 running configuration
+  f5networks.f5_modules.bigip_command:
+    commands:
+      - "tmsh show running-config"
+    provider: "{{ provider }}"
+  register: config_backup
+  delegate_to: localhost
+
+# - name: Debug config_backup
+#   ansible.builtin.debug:
+#     var: config_backup['stdout_lines']
+
+- name: Save the configuration to the temporary config store
+  ansible.builtin.copy:
+    content: "{{ config_backup['stdout'] }}"
+    dest: "{{ tmp_config_store }}"
+  delegate_to: localhost
+
