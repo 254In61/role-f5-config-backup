@@ -6,12 +6,14 @@
     state: absent
     provider: "{{ provider }}"
   delegate_to: localhost
+  ignore_errors: true
 
 - name: UCS Backup - Create empty file as placeholder on controller
   ansible.builtin.file:
     path: "{{ root_dir }}/{{ ucs_filename }}"
     state: touch
   delegate_to: localhost
+  ignore_errors: true
 
 - name: UCS Backup - Download a new UCS 
   f5networks.f5_modules.bigip_ucs_fetch:
@@ -20,4 +22,4 @@
     provider: "{{ provider }}"
     async_timeout: 180
   delegate_to: localhost
-  
+  ignore_errors: true

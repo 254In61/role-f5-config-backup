@@ -16,6 +16,7 @@
     provider: "{{ provider }}"
   register: config_backup
   delegate_to: localhost
+  ignore_errors: true
 
 # - name: Debug config_backup
 #   ansible.builtin.debug:
@@ -33,10 +34,12 @@
   ansible.builtin.set_fact:
     formatted_config: "{{ config_output.stdout[0] | regex_replace('\r\n', '\n') }}"
   delegate_to: localhost
+  ignore_errors: true
 
 - name: Save the configuration to the temporary config store
   ansible.builtin.copy:
     content: "{{ formatted_config }}"
     dest: "{{ tmp_config_store }}"
   delegate_to: localhost
+  ignore_errors: true
 
