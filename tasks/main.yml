@@ -2,10 +2,10 @@
 # Main tasks
 - name: Import backup running config tasks
   ansible.builtin.import_tasks: backup-running-config.yml
-  when: f5_config == true
+  when: f5_config | bool
   
 - name: Import backup ucs file tasks
   ansible.builtin.import_tasks: backup-ucs-file.yml
-  when: f5_ucs == true
+  when: f5_ucs | bool
 
   
