@@ -20,6 +20,6 @@
     src: "{{ ucs_filename }}"
     dest: "{{ root_dir }}/{{ ucs_filename }}"
     provider: "{{ provider }}"
-    async_timeout: 180
+    async_timeout: 600
   delegate_to: localhost
   ignore_errors: true
