@@ -1,0 +1,12 @@
+---
+# DIR
+root_dir: /tmp
+
+# FILES
+config_backup_file: "{{ inventory_hostname }}-running-config.cfg"
+
+# F5
+f5_git_repo_dir: f5
+f5_access_port: 443
+f5_ucs_file_name: "{{ inventory_hostname }}-ucs-backup.ucs"
+f5_timeout: 600 

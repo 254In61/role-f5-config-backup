@@ -1,0 +1,43 @@
+---
+- name: Backup f5 Configuration
+  hosts: appc_bigip_lb
+  gather_facts: false
+  connection: local
+
+  vars:
+    # ansible_network_os: f5
+    provider:
+      server: "{{ ansible_host }}"
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      validate_certs: false
+      server_port: "{{ f5_access_port }}"
+      timeout: "{{ f5_timeout }}"
+
+  pre_tasks:
+    - name: Include specific project variables
+      ansible.builtin.include_vars:
+        dir: group_vars
+      delegate_to: localhost
+
+  tasks:
+    - name: Set file operations facts
+      ansible.builtin.set_fact:
+        tmp_config_store: "{{ root_dir }}/{{ config_backup_file }}"
+        git_repo_vendor_dir: "{{ f5_git_repo_dir }}"
+        ucs_filename: "{{ f5_ucs_file_name }}"
+      delegate_to: localhost
+
+    - name: Import role-f5-config-backup role - config backup tasks
+      ansible.builtin.import_role:
+        name: role-f5-config-backup
+      vars:
+        f5_config: true
+        f5_ucs: false
+
+    - name: Import role-f5-config-backup role - ucs file backup tasks
+      ansible.builtin.import_role:
+        name: role-f5-config-backup
+      vars:
+        f5_config: false
+        f5_ucs: true
