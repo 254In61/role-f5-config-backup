@@ -1,12 +1,23 @@
 ---
-# DIR
 root_dir: /tmp
-
-# FILES
-config_backup_file: "{{ inventory_hostname }}-running-config.cfg"
-
-# F5
 f5_git_repo_dir: f5
 f5_access_port: 443
-f5_ucs_file_name: "{{ inventory_hostname }}-ucs-backup.ucs"
 f5_timeout: 600 
+
+# ==== GITLAB ====
+git_user_email: your-email@something.com
+git_sub_domain: your-git-domain
+
+# AAP doesn't pass SCM credentials over to Execution environment.
+# Work around was to use Network credential type that takes in username/password.
+# Parses env var : ANSIBLE_NET_USERNAME & ANSIBLE_NET_PASSWORD
+git_user: "{{ lookup('env', 'ANSIBLE_NET_USERNAME') }}"
+git_pwd: "{{ lookup('env', 'ANSIBLE_NET_PASSWORD') }}"
+
+
+# === CONFIG BACKUP =====
+config_backup_git_repo_f5_dir: f5
+config_backup_git_repo_namespace: your-repo-name-space
+config_backup_git_repo_name: network-devices-configs-backup-store
+config_backup_git_repo_branch: main
+config_backup_git_repo_url: "https://{{ git_user }}:{{ git_pwd }}@{{ git_sub_domain }}/{{ config_backup_git_repo_namespace }}/{{ config_backup_git_repo_name }}.git"
