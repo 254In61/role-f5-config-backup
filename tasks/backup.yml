@@ -73,7 +73,7 @@
 # Enable git lfs by default
 - name: Enable git lfs by default
   ansible.builtin.shell: |
-    cd {{ local_git_repo_path }}
+    cd {{ tmp_root_dir }}/{{ git_repo_name }}
     git lfs track "*.bin"
     git lfs track "*.ucs"
     git lfs track "*.tgz" 
@@ -107,7 +107,7 @@
     cp {{ running_config_tmp_file_path }} {{ inventory_hostname_dir_path }}
     cp {{ ucs_tmp_file_path }} {{ inventory_hostname_dir_path }}
   ignore_errors: true
-  run_once: true
+  # run_once: true # You want all inventory hostname files copied
   delegate_to: localhost
 
 - name: Commit the changes and push to the remote repository
