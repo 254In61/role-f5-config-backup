@@ -57,6 +57,14 @@
   delegate_to: localhost
   ignore_errors: true
 
+- name: Clean up files  # Ensure no git conflicts
+  ansible.builtin.shell: |
+    cd {{ tmp_root_dir }}
+    rm -rf {{ git_repo_name }}
+  run_once: true
+  ignore_errors: true
+  delegate_to: localhost
+
 # Git tasks
 - name: Clone the config backup git repository
   ansible.builtin.git:
