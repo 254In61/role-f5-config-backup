@@ -72,7 +72,7 @@
     dest: "{{ tmp_root_dir }}/{{ git_repo_name }}"
     version: "{{ git_repo_branch }}"
     force: yes       # Still clone down and overwrite incase local repo is existing.
-  # ignore_errors: true # You want this to fail if errors are there
+  ignore_errors: true # You want your role to go upto the end for notifications to be sent
   environment:
     GIT_SSL_NO_VERIFY: "true"
   run_once: true
@@ -129,7 +129,7 @@
   run_once: true
   environment:
     GIT_SSL_NO_VERIFY: "true"
-  # ignore_errors: true # You want the play to fail if git push does not happen
+  ignore_errors: true # You want your role to go upto the end for notifications to be sent
   delegate_to: localhost
 
 # Might not need this since containers are ephemeral.
