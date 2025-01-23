@@ -1,13 +1,13 @@
 ---
 # Config backup tasks
-- name: Set varibales
-  ansible.builtin.set_fact:
-    running_config_tmp_file_path: "{{ tmp_root_dir }}/{{ inventory_hostname }}-running-config.cfg"
-    ucs_filename: "{{ inventory_hostname }}-ucs-backup.ucs"
-    ucs_tmp_file_path: "{{ tmp_root_dir }}/{{ inventory_hostname }}-ucs-backup.ucs"
-    inventory_hostname_dir_path: "{{ tmp_root_dir }}/{{ git_repo_name }}/{{ vendor_dir }}/{{ inventory_hostname }}/config-backup"
-  delegate_to: localhost
-  ignore_errors: true # You want the role to run end to end
+# - name: Set varibales
+#   ansible.builtin.set_fact:
+#     running_config_tmp_file_path: "{{ tmp_root_dir }}/{{ inventory_hostname }}-running-config.cfg"
+#     ucs_filename: "{{ inventory_hostname }}-ucs-backup.ucs"
+#     ucs_tmp_file_path: "{{ tmp_root_dir }}/{{ inventory_hostname }}-ucs-backup.ucs"
+#     inventory_hostname_dir_path: "{{ tmp_root_dir }}/{{ git_repo_name }}/{{ vendor_dir }}/{{ inventory_hostname }}/config-backup"
+#   delegate_to: localhost
+#   ignore_errors: true # You want the role to run end to end
 
 - name: Collect f5 running configuration
   f5networks.f5_modules.bigip_command:
@@ -26,17 +26,17 @@
   delegate_to: localhost
   ignore_errors: true
 
-- name: Save the configuration to the temporary config store
+- name: Save the running config to a file
   ansible.builtin.copy:
     content: "{{ formatted_config }}"
-    dest: "{{ running_config_tmp_file_path }}"
+    dest: "{{ _running_config_file_path_ }}"
   delegate_to: localhost
   ignore_errors: true
 
 # UCS file backup
 - name: UCS Backup - Remove older ucs file 
   f5networks.f5_modules.bigip_ucs:
-    ucs: "{{ ucs_filename }}"
+    ucs: "{{ _ucs_file_name_ }}"
     state: absent
     provider: "{{ provider }}"
   delegate_to: localhost
@@ -44,19 +44,19 @@
 
 - name: UCS Backup - Create empty file on controller
   ansible.builtin.file:
-    path: "{{ ucs_tmp_file_path }}"
+    path: "{{ _ucs_file_backup_path_ }}"
     state: touch
   delegate_to: localhost
   ignore_errors: true
 
 - name: UCS Backup - Download a new UCS 
   f5networks.f5_modules.bigip_ucs_fetch:
-    src: "{{ ucs_filename }}"
-    dest: "{{ ucs_tmp_file_path }}"
+    src: "{{ _ucs_file_name_ }}"
+    dest: "{{ _ucs_file_backup_path_ }}"
     provider: "{{ provider }}"
     async_timeout: 600
   delegate_to: localhost
   ignore_errors: true
 
-- name: Import Tasks
-  ansible.builtin.import_tasks: git.yml
+# - name: Import Tasks
+#   ansible.builtin.import_tasks: git.yml
