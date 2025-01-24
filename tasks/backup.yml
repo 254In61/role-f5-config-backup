@@ -13,7 +13,7 @@
   f5networks.f5_modules.bigip_command:
     commands:
       - "tmsh show running-config"
-    provider: "{{ provider }}"
+    provider: "{{ _provider_ }}"
   delegate_to: localhost
   ignore_errors: true
   register: config_backup
@@ -38,7 +38,7 @@
   f5networks.f5_modules.bigip_ucs:
     ucs: "{{ _ucs_file_name_ }}"
     state: absent
-    provider: "{{ provider }}"
+    provider: "{{ _provider_ }}"
   delegate_to: localhost
   ignore_errors: true
 
@@ -53,7 +53,7 @@
   f5networks.f5_modules.bigip_ucs_fetch:
     src: "{{ _ucs_file_name_ }}"
     dest: "{{ _ucs_file_backup_path_ }}"
-    provider: "{{ provider }}"
+    provider: "{{ _provider_ }}"
     async_timeout: 600
   delegate_to: localhost
   ignore_errors: true
