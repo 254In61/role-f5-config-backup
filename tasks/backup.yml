@@ -1,14 +1,4 @@
 ---
-# Config backup tasks
-# - name: Set varibales
-#   ansible.builtin.set_fact:
-#     running_config_tmp_file_path: "{{ tmp_root_dir }}/{{ inventory_hostname }}-running-config.cfg"
-#     ucs_filename: "{{ inventory_hostname }}-ucs-backup.ucs"
-#     ucs_tmp_file_path: "{{ tmp_root_dir }}/{{ inventory_hostname }}-ucs-backup.ucs"
-#     inventory_hostname_dir_path: "{{ tmp_root_dir }}/{{ git_repo_name }}/{{ vendor_dir }}/{{ inventory_hostname }}/config-backup"
-#   delegate_to: localhost
-#   ignore_errors: true # You want the role to run end to end
-
 - name: Collect f5 running configuration
   f5networks.f5_modules.bigip_command:
     commands:
@@ -57,6 +47,3 @@
     async_timeout: 600
   delegate_to: localhost
   ignore_errors: true
-
-# - name: Import Tasks
-#   ansible.builtin.import_tasks: git.yml
